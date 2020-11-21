@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Edit sector {% endblock %}
+
+{% block header %}
+	{% include '_includes/header.html.twig' with {
+		'levels': ['Crud', 'Sectors', 'Create']
+	} %}
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron text-center bg-dark text-light">
+	<h1> Edit sector '{{sector.name}}' </h1>
+</div>
+
+<div class="content">
+    <div class="row">
+        <div class="col-xl-4 col-md-3 col-sm-2"></div>
+        <div class="col-xl-4 col-md-6 col-sm-8 px-4 shadow p-3 m-5 bg-white rounded">
+            {{ form_start(form)}}
+                {% if error is defined %}
+                    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                        {{error}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    {{ form_widget  (form.name,{'attr': {
+                                        "class" : "form-control",
+                                        "placeholder" : "Name of the sector",
+                                        "pattern" : "^[A-Za-z0-9 \"“”'‘’()[\]{}<>«»\\\/?!&@£$€¥.,-]{3}[*=#%+A-Za-z0-9 \"“”'‘’()[\]{}<>«»\\\/?!&@£$€¥.,-]{0,157}$",
+                                        "title" : "You introduced a invalid character"
+                    }} ) }}
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6">
+                            <a class="text-white text-decoration-none" href="{{path('sectors')}}">
+                                <button type="button" class="btn btn-danger btn-block">Cancel</button>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" class="btn btn-primary btn-block">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            {{ form_end(form)}}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block goback %}{% endblock %}

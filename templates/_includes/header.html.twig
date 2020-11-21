@@ -1,0 +1,71 @@
+
+<div class="content px-5 py-3">
+	<div class="row">
+		<div class="col-6 text-left d-none d-sm-block">
+			<a class="text-info" href="{{path('index')}}">
+				<i class="fas fa-home"></i>
+			</a>
+
+			{% if levels is defined %}
+				{% for piece in levels %}
+			<i class="mx-1 fas fa-caret-right text-secondary"></i>
+			<a class="text-info" href="{{path('index')}}">
+				<b>{{piece}}</b>
+			</a>
+				{% endfor %}
+			{% endif %}
+		</div>
+
+		<div class="col-6 text-right d-none d-sm-block">
+			{% if app.user %}
+			You are logged in as <b>{{ app.user.username }}</b>
+			{% if is_granted('ROLE_ADMIN') %}
+			<a href="{{path('change-role')}}">
+				<i class="fas fa-tools text-warning"></i>
+				<span class="text-warning">
+					[admin]
+				</span>
+			</a>
+
+			{% else %}
+			<a href="{{path('change-role')}}">
+				<i class="fas fa-user text-success"></i>
+				<span class="text-success">[user]</span>
+			</a>
+			{% endif %}
+			<span class="mx-2 text-secondary font-weight-light"> | </span>
+			<a class="text-info" href="{{path('logout')}}"><b>Logout</b></a>
+			{% else %}
+			You are not logged in.
+			<span class="mx-2 text-secondary font-weight-light"> | </span>
+			<a href="{{path('login')}}"><b>Login</b></a>
+			{% endif %}
+		</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12 text-right d-block d-sm-none pb-1 border-bottom">
+			<a href="{{path('login')}}"><b>Login</b></a>
+			<span class="mx-2"> | </span>
+			<a href="{{path('logout')}}"><b>Logout</b></a>
+		</div>
+
+		<div class="col-12 text-left d-block d-sm-none">
+			<a class="text-info" href="{{path('index')}}">
+				<i class="fas fa-home"></i>
+			</a>
+
+			{% if levels is defined %}
+				{% for piece in levels %}
+			<i class="mx-1 fas fa-caret-right"></i>
+			<a class="text-info" href="{{path('index')}}">
+				<b>{{piece}}</b>
+			</a>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>

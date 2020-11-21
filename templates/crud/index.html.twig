@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Companies and sectors {% endblock %}
+
+{% block header %}
+	{% include '_includes/header.html.twig' with {
+		'levels': ['Crud']
+	} %}
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron text-center bg-info text-white">
+	<h1> Companies and sectors </h1>
+	<p> In each button below, you can check functionality for each one of the entities </p>
+</div>
+
+<div class="container">
+	<div class="row px-4">
+	{% if app.user %}
+		<div class="col-sm-6 py-3">
+			<a href="{{path('companies')}}">
+				<button class="btn-lg btn-secondary shadow-sm group-1" type="button">
+					<h3> Companies </h3>
+					<p> Here you can manipulate the CRUD of the Companies table. This one is linked through a foreign key to Sectors,
+						so any manipulation on sectors affect the sectors data in Companies. </p>
+				</button>
+			</a>
+		</div>
+
+		<div class="col-sm-6 py-3">
+			<a href="{{path('sectors')}}">
+				<button class="btn-lg btn-secondary group-1" type="button">
+					<h3> Sectors </h3>
+					<p> Here you can manipulate the CRUD of the Sectors table. </p>
+				</button>
+			</a>
+		</div>
+	{% else %}
+		<div class="col-sm-6 py-3">
+			<a href="{{path('login')}}">
+				<button class="btn-lg btn-white shadow-sm group-1" type="button" class="text-secondary">
+					<h3 class="text-secondary"> Companies </h3>
+					<p class="text-secondary"> Here you can manipulate the CRUD of the Companies table. This one is linked through a foreign key to Sectors,
+						so any manipulation on sectors affect the sectors data in Companies. </p>
+						<i class="fas fa-lock text-danger"></i> <span class="text-danger">You must be logged in to enter this section</span>
+				</button>
+			</a>
+		</div>
+
+		<div class="col-sm-6 py-3">
+			<a href="{{path('login')}}">
+				<button class="btn-lg btn-white group-1" type="button">
+					<h3 class="text-secondary"> Sectors </h3>
+					<p class="text-secondary"> Here you can manipulate the CRUD of the Sectors table. </p>
+					<i class="fas fa-lock text-danger"></i> <span class="text-danger">You must be logged in to enter this section</span>
+				</button>
+			</a>
+		</div>
+	{% endif %}
+
+	</div>
+</div>
+{% endblock %}

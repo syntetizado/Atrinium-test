@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Sectors {% endblock %}
+
+{% block header %}
+	{% include '_includes/header.html.twig' with {
+		'levels': ['Crud', 'Sectors']
+	} %}
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron text-center bg-dark text-light">
+	<h1> Sectors </h1>
+</div>
+
+<div class="content">
+    <div class="row">
+        <div class="col-auto">
+            <h2>Sectors</h2>
+        </div>
+		{% if app.user.idrole.codename == 'ROLE_ADMIN' %}
+        <div class="col-auto">
+            <a href="{{path('create-sector')}}">
+                <button class="btn btn-primary">
+                    Create <i class="fas fa-plus ml-2"></i>
+                </button>
+            </a>
+        </div>
+		{% endif %}
+    </div>
+
+<div class="m-5">
+	{% if pagerfanta.haveToPaginate %}
+	<nav aria-label="Page navigation example">
+		<ul class="pagination pg-blue">
+			{% if pagerfanta.hasPreviousPage %}
+			<li class="page-item">
+				<a class="page-link" tabindex="-1" href="{{path('sectors',{'page' : pagerfanta.getPreviousPage })}}">Previous</a>
+			{% else %}
+			<li class="page-item disabled">
+				<a class="page-link" tabindex="-1">Previous</a>
+			{% endif %}
+			</li>
+
+			{% if useMin == true %}
+			<li class="page-item">
+				<a class="page-link" href="{{path('sectors',{'page' : 1 })}}">1</a>
+			</li>
+				{% if pagerfanta.getCurrentPage != 4 %}
+			<li class="page-item disabled">
+				<a class="page-link">...</a>
+			</li>
+				{% endif %}
+			{% endif %}
+
+			{% for page in minPage .. maxPage %}
+			{% if page == pagerfanta.getCurrentPage %}
+			<li class="page-item active">
+			{% else %}
+			<li class="page-item">
+			{% endif %}
+				<a class="page-link" href="{{path('sectors',{'page' : page })}}">{{page}}</a>
+			</li>
+			{% endfor %}
+
+			{% if useMax == true %}
+				{% if pagerfanta.getCurrentPage != pagerfanta.getNbPages - 3 %}
+			<li class="page-item disabled">
+				<a class="page-link">...</a>
+			</li>
+				{% endif %}
+			<li class="page-item">
+				<a class="page-link" href="{{path('sectors',{'page' : pagerfanta.getNbPages })}}">{{pagerfanta.getNbPages}}</a>
+			</li>
+			{% endif %}
+
+			{% if pagerfanta.hasNextPage %}
+			<li class="page-item">
+				<a class="page-link" href="{{path('sectors',{'page' : pagerfanta.getNextPage })}}">Next</a>
+			{% else %}
+			<li class="page-item disabled">
+				<a class="page-link">Next</a>
+			{% endif %}
+			</li>
+		</ul>
+	</nav>
+	{% endif %}
+	<table class="table col-12 table-hover table-responsive-sm">
+	    <thead>
+	        <tr>
+	            <th scope="col">#</th>
+	            <th scope="col">Nombre</th>
+				{% if app.user.idrole.codename == 'ROLE_ADMIN' %}
+				<th scope="col">Edit</th>
+	            <th scope="col">Delete</th>
+				{% endif %}
+	        </tr>
+	    </thead>
+	    <tbody>
+	    {% for sector in pagerfanta.getCurrentPageResults %}
+	        <tr>
+	            <th scope="col">{{sector.id}}</th>
+	            <th scope="col">{{sector.name}}</th>
+				{% if app.user.idrole.codename == 'ROLE_ADMIN' %}
+	            <th scope="col">
+	                <a href="{{path('edit-sector',{'id':sector.id})}}">
+	                    <button class="btn btn-primary">
+	                        <i class="fas fa-edit"></i>
+	                    </button>
+	                </a>
+	            </th>
+	            <th scope="col">
+	            <a href="{{path('delete-sector',{'id':sector.id})}}">
+	                <button class="btn btn-danger">
+	                    <i class="fas fa-trash"></i>
+	                </button>
+	            </a>
+	            </th>
+				{% endif %}
+	        </tr>
+	    {% endfor %}
+	    </tbody>
+	</table>
+</div>
+
+</div>
+{% endblock %}

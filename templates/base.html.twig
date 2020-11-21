@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% include "_includes/head.html.twig" %}
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        {% block header %}{% endblock %}
+        {% if app.request.get('logout') %}
+            {% set modal = {
+                'title': 'Logged out',
+                'message': 'You have been logged out',
+                'button': 'Ok'
+            } %}
+        {% endif %}
+        {% if app.request.get('modal') %}
+            {% set modal = {
+                'title': app.request.get('modal'),
+                'message': app.request.get('message'),
+                'button': app.request.get('button')
+            } %}
+        {% endif %}
+
+        {% block body %}{% endblock %}
+
+        {% include "_includes/scripts.html.twig" %}
+        {% block scripts %}{% endblock %}
+
+        {% block goback %}
+            {% set currentRoute = path(app.request.attributes.get('_route')) %}
+            {% if currentRoute != "/" %}
+        <p class="ml-5 mt-5">
+            <a href="{{path('go-back',{'currentRoute' : currentRoute})}}">
+                <button class="btn btn-secondary btn-lg">Go back <i class="fas fa-undo"></i></button>
+		    </a>
+        </p>
+            {% endif %}
+        {% endblock %}
+
+        {% if modal is defined %}
+        <div class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ modal.title }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <p>{{ modal.message }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ modal.button }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(window).on('load',function(){
+                $('.modal').modal('show');
+            });
+        </script>
+        {% endif %}
+    </body>
+</html>

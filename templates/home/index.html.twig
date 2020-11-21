@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Main menu{% endblock %}
+
+{% block header %}
+	{% include '_includes/header.html.twig' %}
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron text-center">
+	<h1>Aptitude Test: </h1>
+	<p>Use the buttons bellow to check each one of them</p>
+</div>
+
+<div class="container">
+	<div class="row px-4">
+		<div class="col-sm-6 py-3">
+			<a href="{{path('crud')}}">
+				<button class="btn-lg btn-info group-1" type="button">
+					<h3>Companies and sectors</h3>
+					<p>Use of a basic CRUD and pagination</p>
+				</button>
+			</a>
+		</div>
+
+		<div class="col-sm-6 py-3">
+			<a href="{{path('api')}}">
+				<button class="btn-lg btn-success group-1" type="button">
+					<h3>External API</h3>
+					<p>Getting data from an external source</p>
+				</button>
+			</a>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

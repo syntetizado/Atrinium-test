@@ -1,0 +1,83 @@
+{% extends 'form-layout.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block formheader %}
+    {% include '_includes/header.html.twig' with {
+        'levels': ['Register']
+    } %}
+{% endblock %}
+
+{% block formcontent %}
+<div class="login-form px-5 card shadow p-3 mb-0 bg-white rounded">
+
+    {{ form_start(form)}}
+        <h2 class="text-center mb-4">Register form</h2>
+
+        {% if error is defined %}
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                {{error}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            {{ form_widget  (form.username,{'attr': {
+                                "class" : "form-control",
+                                "placeholder" : "Username",
+                                "pattern" : "^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$",
+                                "title" : "Only '_' is allowed as special character"
+            }} ) }}
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <div class="form-group">
+            {{ form_widget  (form.email,{'attr': {
+                                "class" : "form-control",
+                                "placeholder" : "Email@example.com",
+                                "pattern" : "^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
+                                "title" : "It must be a real email address"
+            }} ) }}
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <div class="form-group">
+            {{ form_widget  (form.password,{'attr': {
+                                "class" : "form-control",
+                                "placeholder" : "Password",
+                                "pattern" : "^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]){8,}$",
+                                "title" : "8 or more characters, 1 Upcase character and 1 number minimum"
+            }} ) }}
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <div class="form-group">
+            {{ form_widget  (form.confirmPassword,{'attr': {
+                                "class" : "form-control",
+                                "placeholder" : "Confirm password",
+                                "pattern" : "^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]){8,}$",
+                                "title" : "8 or more characters, 1 Upcase character and 1 number minimum"
+            }} ) }}
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <div class="form-group">
+            <div class="pb-3">
+                {{ form_widget(form.isAdmin,{'required': false}) }} <label for="isAdmin"> This user will be admin</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+        </div>
+    {{ form_end(form)}}
+</div>
+
+{% endblock %}
+
+{% block formunder %}
+
+<p class="text-center"><a href="{{path('login')}}">Go to login</a></p>
+
+{% endblock %}
