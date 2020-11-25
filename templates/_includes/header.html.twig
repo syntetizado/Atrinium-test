@@ -1,38 +1,44 @@
-
-<div class="content px-5 py-3">
+<div class="content px-2 py-3">
 	<div class="row">
-		<div class="col-6 text-left d-none d-sm-block">
+		<div class="col-6 text-left d-none d-lg-block pl-5">
 			<a class="text-info" href="{{path('index')}}">
 				<i class="fas fa-home"></i>
 			</a>
 
 			{% if levels is defined %}
 				{% for piece in levels %}
-			<i class="mx-1 fas fa-caret-right text-secondary"></i>
-			<a class="text-info" href="{{path('index')}}">
-				<b>{{piece}}</b>
-			</a>
+					<i class="mx-1 fas fa-caret-right text-secondary"></i>
+					{% if piece.param is defined %}
+					<a class="text-info" href="{{path(piece.route,{'id': piece.param})}}">
+					{% else %}
+					<a class="text-info" href="{{path(piece.route)}}">
+					{% endif %}
+						<b>{{piece.name}}</b>
+					</a>
 				{% endfor %}
 			{% endif %}
 		</div>
 
-		<div class="col-6 text-right d-none d-sm-block">
+		<div class="col-6 text-right d-none d-lg-block">
 			{% if app.user %}
 			You are logged in as <b>{{ app.user.username }}</b>
-			{% if is_granted('ROLE_ADMIN') %}
-			<a href="{{path('change-role')}}">
-				<i class="fas fa-tools text-warning"></i>
-				<span class="text-warning">
-					[admin]
-				</span>
-			</a>
+				{% if is_granted('ROLE_ADMIN') %}
+				<a href="{{path('profile')}}">
+					<button type="button" class="btn btn-"></button>
+					<i class="fas fa-tools text-info"></i>
+					<span class="text-info">
+						<b>Profile</b>
+					</span>
+				</a>
 
-			{% else %}
-			<a href="{{path('change-role')}}">
-				<i class="fas fa-user text-success"></i>
-				<span class="text-success">[user]</span>
-			</a>
-			{% endif %}
+				{% else %}
+				<a href="{{path('profile')}}">
+					<i class="fas fa-user text-info"></i>
+					<span class="text-info">
+						<b>Profile</b>
+					</span>
+				</a>
+				{% endif %}
 			<span class="mx-2 text-secondary font-weight-light"> | </span>
 			<a class="text-info" href="{{path('logout')}}"><b>Logout</b></a>
 			{% else %}
@@ -41,29 +47,60 @@
 			<a href="{{path('login')}}"><b>Login</b></a>
 			{% endif %}
 		</div>
-			</div>
-
-		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-12 text-right d-block d-sm-none pb-1 border-bottom">
-			<a href="{{path('login')}}"><b>Login</b></a>
-			<span class="mx-2"> | </span>
-			<a href="{{path('logout')}}"><b>Logout</b></a>
+	<div class="row mx-0">
+		<div class="col-12 text-right d-block d-lg-none pb-1 border-bottom">
+			<div class="col-12 my-0">
+				{% if app.user %}
+				You are logged in as <b>{{ app.user.username }}</b>
+				{% else %}
+				You are not logged in.
+				{% endif %}
+			</div>
+			<div class="my-0">
+				{% if app.user %}
+					{% if is_granted('ROLE_ADMIN') %}
+					<a href="{{path('profile')}}">
+						<i class="fas fa-tools text-info"></i>
+						<span class="text-info">
+							<b>Profile</b>
+						</span>
+					</a>
+
+					{% else %}
+					<a href="{{path('profile')}}">
+						<i class="fas fa-user text-info"></i>
+						<span class="text-info">
+							<b>Profile</b>
+						</span>
+					</a>
+					{% endif %}
+				<span class="mx-2 text-secondary font-weight-light"> | </span>
+				<a class="text-info" href="{{path('logout')}}"><b>Logout</b></a>
+				{% else %}
+				<span class="mx-2 text-secondary font-weight-light"> | </span>
+				<a href="{{path('login')}}"><b>Login</b></a>
+				{% endif %}
+			</div>
+			</div>
 		</div>
 
-		<div class="col-12 text-left d-block d-sm-none">
+		<div class="col-12 text-left d-block d-lg-none">
 			<a class="text-info" href="{{path('index')}}">
 				<i class="fas fa-home"></i>
 			</a>
 
 			{% if levels is defined %}
 				{% for piece in levels %}
-			<i class="mx-1 fas fa-caret-right"></i>
-			<a class="text-info" href="{{path('index')}}">
-				<b>{{piece}}</b>
-			</a>
+					<i class="mx-1 fas fa-caret-right text-secondary"></i>
+					{% if piece.param is defined %}
+					<a class="text-info" href="{{path(piece.route,{'id': piece.param})}}">
+					{% else %}
+					<a class="text-info" href="{{path(piece.route)}}">
+					{% endif %}
+						<b>{{piece.name}}</b>
+					</a>
 				{% endfor %}
 			{% endif %}
 		</div>

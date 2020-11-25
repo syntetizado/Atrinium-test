@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ApiController!{% endblock %}
+
+{% block body %}
+
+<div class="jumbotron text-center bg-success text-light">
+	<h1> Money currency conversion </h1>
+	<p>Fill the form and press <b>convert</b> to see the results</p>
+</div>
+
+<div class="content">
+    <div class="row">
+        <div class="col-xl-4 col-md-3 col-sm-2"></div>
+        <div class="col-xl-4 col-md-6 col-sm-8 px-4 shadow p-3 m-5 bg-white rounded">
+            {{ form_start(form)}}
+                {% if error is defined %}
+                    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                        {{error}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+					<div class="row text-right">
+						<div class="col-2">
+							{{ form_label (form.coinFrom)}}
+						</div>
+						<div class="col-10">
+							{{ form_widget  (form.coinFrom,{'attr': {"class" : "form-control"}}) }}
+						</div>
+					</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+				<div class="form-group">
+					<div class="row text-right">
+						<div class="col-2">
+							{{ form_label (form.coinTo)}}
+						</div>
+						<div class="col-10">
+							{{ form_widget  (form.coinTo,{'attr': {"class" : "form-control"}}) }}
+						</div>
+					</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+				<div class="form-group">
+					{{ form_label (form.amount)}}
+					{{ form_widget  (form.amount,{'attr': {
+                                        "class" : "form-control",
+                                        "placeholder" : "0.00",
+                                        "title" : "You introduced a invalid character"
+                    }} ) }}
+                    <div class="valid-feedback">Valid.</div>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+				<div class="form-group">
+					{{ form_label (form.date)}}
+					{{ form_widget  (form.date,{'attr': {
+                                        "class" : "js-datepicker form-control",
+                                        "placeholder" : "YYYY-MM-DD",
+                                        "title" : "You introduced a invalid character"
+                    }} ) }}
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6">
+                            <a class="text-white text-decoration-none" href="{{path('sectors')}}">
+                                <button type="button" class="btn btn-danger btn-block">Cancel</button>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" class="btn btn-primary btn-block">Convert</button>
+                        </div>
+                    </div>
+                </div>
+            {{ form_end(form)}}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		// you may need to change this code if you are not using Bootstrap Datepicker
+		$('.js-datepicker').datepicker({
+			format: 'yyyy-mm-dd'
+		});
+	});
+</script>
+
+{% endblock %}

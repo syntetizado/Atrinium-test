@@ -4,8 +4,21 @@
 
 {% block header %}
 	{% include '_includes/header.html.twig' with {
-		'levels': ['Crud', 'Sectors', 'Create']
-	} %}
+		'levels': {
+			1 : {
+				'name' : 'Crud',
+				'route' : 'crud',
+				},
+			2 : {
+				'name' : 'Sectors',
+				'route' : 'sectors',
+				},
+			3 : {
+				'name' : 'Edit sector',
+				'route' : 'edit-sector',
+				'param' : sector.id,
+				}
+		}} %}
 {% endblock %}
 
 {% block body %}

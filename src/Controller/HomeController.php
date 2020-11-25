@@ -35,7 +35,8 @@ class HomeController extends AbstractController
     /**
      * @Route("/go-back", name="go-back")
      */
-    public function goBack(Request $request){
+    public function goBack(Request $request)
+    {
         $requestURI=$request->get('currentRoute');
 
         $after_bar = strrchr($requestURI, '/');
@@ -43,7 +44,8 @@ class HomeController extends AbstractController
         //deletes last bar in uri
         $url = str_replace($after_bar,'',$requestURI);
 
-        if ($url== '') {
+        if ($url== '')
+        {
             $url = "/";
         }
 

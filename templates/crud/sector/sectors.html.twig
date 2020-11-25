@@ -4,8 +4,16 @@
 
 {% block header %}
 	{% include '_includes/header.html.twig' with {
-		'levels': ['Crud', 'Sectors']
-	} %}
+		'levels': {
+			1 : {
+				'name' : 'Crud',
+				'route' : 'crud',
+				},
+			2 : {
+				'name' : 'Sectors',
+				'route' : 'sectors',
+				}
+		}} %}
 {% endblock %}
 
 {% block body %}
@@ -85,6 +93,7 @@
 		</ul>
 	</nav>
 	{% endif %}
+
 	<table class="table col-12 table-hover table-responsive-sm">
 	    <thead>
 	        <tr>
@@ -110,11 +119,11 @@
 	                </a>
 	            </th>
 	            <th scope="col">
-	            <a href="{{path('delete-sector',{'id':sector.id})}}">
-	                <button class="btn btn-danger">
-	                    <i class="fas fa-trash"></i>
-	                </button>
-	            </a>
+		            <a href="{{path('delete-sector',{'id':sector.id})}}">
+		                <button class="btn btn-danger">
+		                    <i class="fas fa-trash"></i>
+		                </button>
+		            </a>
 	            </th>
 				{% endif %}
 	        </tr>

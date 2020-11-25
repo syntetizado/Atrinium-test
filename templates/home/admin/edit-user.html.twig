@@ -1,0 +1,207 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Edit sector {% endblock %}
+
+{% block header %}
+	{% include '_includes/header.html.twig' with {
+		'levels': {
+			1 : {
+				'name' : 'My profile',
+				'route' : 'profile',
+				},
+			2 : {
+				'name' : 'Administrate users',
+				'route' : 'admin-users',
+				},
+			3 : {
+				'name' : 'Edit user',
+				'route' : 'admin-edit-user',
+				'param' : user.id,
+				}
+		}} %}
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron text-center bg-dark text-light">
+	<h1> Edit user '{{user.username}}' </h1>
+</div>
+
+<div class="container">
+	<div class="main-body">
+		<div class="row gutters-sm">
+
+			<div class="m-3 login-form px-5 card shadow p-3 mb-0 bg-white rounded col-11 col-md-5">
+
+				{{ form_start  (form,{'attr': {
+									"autocomplete" : "nope",
+				}} ) }}
+			        <h2 class="text-center mb-4">Edit user</h2>
+
+			        {% if error is defined %}
+			            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+			                {{error}}
+			                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			                    <span aria-hidden="true">&times;</span>
+			                </button>
+			            </div>
+			        {% endif %}
+
+			        <div class="form-group">
+			            {{ form_widget  (form.username,{'attr': {
+			                                "class" : "form-control",
+			                                "pattern" : "^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$",
+			                                "title" : "Only '_' is allowed as special character"
+			            }} ) }}
+			            <div class="valid-feedback">Valid.</div>
+			            <div class="invalid-feedback">Please fill out this field.</div>
+			        </div>
+			        <div class="form-group">
+			            {{ form_widget  (form.email,{'attr': {
+			                                "class" : "form-control",
+			                                "pattern" : "^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$",
+			                                "title" : "It must be a real email address"
+			            }} ) }}
+			            <div class="valid-feedback">Valid.</div>
+			            <div class="invalid-feedback">Please fill out this field.</div>
+			        </div>
+			        <div class="form-group">
+			            {{ form_widget  (form.password,{
+							'required' : false,
+							'attr': {
+			                    "class" : "form-control",
+
+			            }} ) }}
+			        </div>
+			        <div class="form-group">
+			            <div class="pb-3">
+							{{ form_widget  (form.role,{'attr': {
+				                                "class" : "form-control"
+				            }} ) }}
+			            </div>
+			        </div>
+					<div class="form-group">
+			            <div class="pb-3">
+							{{ form_label (form.isActive) }}
+							{{ form_widget  (form.isActive,{'attr': {
+				                                "class" : "form-control"
+				            }} ) }}
+			            </div>
+			        </div>
+			        <div class="form-group">
+			            <button type="submit" class="btn btn-primary btn-block">Edit</button>
+			        </div>
+					{{ form_widget  (form.data_in_sectors,{'attr': {
+										"class" : "form-control",
+										"id" : "data_in_sectors",
+										"name" : "data_in_sectors"
+					}} ) }}
+			    {{ form_end(form)}}
+			</div>
+
+			<div class="m-3 px-5 card shadow p-3 mb-0 bg-white rounded col-xl-6 col-lg-6 col-md-5">
+				<div class="row">
+					<div class="col-6">
+						<h3>Sectors</h3>
+					</div>
+					<select id="sector" name="sector" class="form-control">
+						<option value="-1" selected disabled>Select to add</option>
+						<option value="0">None</option>
+						{% for sector in sectors %}
+						    <option value="{{sector.id}}">{{sector.name}}</option>
+						{% endfor %}
+					</select>
+
+					<div class="form-group row mt-4" id="sector_select">
+	                    <span class="ml-3 mb-2">Selected:</span>
+
+	                    <div class="col-md-12">
+	                        <ul class="list-group" id="sector_item">
+								{% for sector in sectorsOwned %}
+								    <li class='list-group-item d-flex justify-content-between align-items-center'>
+										{{sector.idsector.name}}
+										<i class='fas fa-times' style='color:red;' id="{{sector.idsector.id}}" onclick='delSector({{sector.idsector.id}})'></i>
+									</li>
+								{% endfor %}
+	                        </ul>
+	                    </div>
+	                </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block goback %}{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	function updateSector(option){
+		var info ="";
+
+		if(option == 0){
+			$("#sector_item li i").each(function(index) {
+				var element = $(this);
+				var id = element.attr('id');
+				id = id.replace('id', '');
+				info += id+",";
+			});
+		}else{
+			info = 0;
+		}
+
+		$('#form_data_in_sectors').val(info);
+	}
+
+	$("#sector").change(function(){
+		var id = $(this).val();
+		var name = $(this).find("option:selected").text();
+		var content = document.getElementById('sector_item');
+
+		if(id == 0)
+		{
+			content.innerHTML = "";
+			document.getElementById("sector_select").style.display = "none";
+			updateSector(1);
+		}
+		else
+		{
+			var exists = false;
+			$("#sector_item li i").each(function(index) {
+				var element = $(this);
+				var elementId = element.attr('id');
+				if (elementId == id) {
+					exists = true;
+				}
+			});
+
+			if (!exists) {
+				document.getElementById("sector_select").style.display = "flex";
+				content.innerHTML += "<li class='list-group-item d-flex justify-content-between align-items-center'>"+name+"<i class='fas fa-times' style='color:red;'' id='"+id+"'' onclick='delSector(this.id)'></i></li>";
+				updateSector(0);
+			}
+		}
+
+	})
+
+	function delSector(id){
+	   var id_level = $('#'+id).attr('id');
+		id_level = id_level.replace('id_sector', '');
+
+		var element = $('#'+id).parent();
+		element.remove();
+
+		updateSector(0);
+
+		count=0;
+		$("#sector_item li i").each(function(index) {
+			count++;
+		});
+
+		if (count == 0){
+			document.getElementById("sector_select").style.display = "none";
+		}
+	}
+</script>
+{% endblock %}

@@ -4,8 +4,20 @@
 
 {% block header %}
 	{% include '_includes/header.html.twig' with {
-		'levels': ['Crud', 'Sectors', 'Create']
-	} %}
+		'levels': {
+			1 : {
+				'name' : 'Crud',
+				'route' : 'crud',
+				},
+			2 : {
+				'name' : 'Companies',
+				'route' : 'companies',
+				},
+			3 : {
+				'name' : 'New company',
+				'route' : 'create-company',
+				}
+		}} %}
 {% endblock %}
 
 {% block body %}
@@ -60,9 +72,7 @@
 				<div class="form-group">
 					{{ form_label(form.sector) }}
                     {{ form_widget  (form.sector,{'attr': {
-                                        "class" : "form-control",
-                                        "placeholder" : "Name of the sector",
-                                        "pattern" : "^[A-Za-z0-9 \"“”'‘’()[\]{}<>«»\\\/?!&@£$€¥.,-]{3}[*=#%+A-Za-z0-9 \"“”'‘’()[\]{}<>«»\\\/?!&@£$€¥.,-]{0,157}$"
+                                        "class" : "form-control"
                     }} ) }}
                     <div class="valid-feedback">Valid.</div>
                     <div class="invalid-feedback">Please fill out this field.</div>

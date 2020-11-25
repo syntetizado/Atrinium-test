@@ -18,19 +18,21 @@ use Symfony\Component\Security\Core\Security;
 // Import needed Entities
 use App\Entity\Sector;
 use App\Entity\User;
+use App\Entity\Company;
 use App\Entity\UserSector;
 
 // Import form type classes
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+// Import needed classes for using pagerfanta
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 
 class SectorController extends AbstractController
 {
     /**
-     * @Route("/crud/sectors/new", name="create-sector")
+     * @Route("/crud/sector/new", name="create-sector")
      */
     public function createSector(Security $security, Request $request): Response
     {
@@ -38,14 +40,18 @@ class SectorController extends AbstractController
         $user = $security->getUser();
 
         //check for user and get his role, redirect if no user is logged
-        if ($user) {
+        if ($user)
+        {
             $role = $user->getIdRole()->getCodename();
-        } else {
+        }
+        else
+        {
             return $this->redirectToRoute('login');
         }
 
         //stops the method if it's not admin
-        if ($role != 'ROLE_ADMIN') {
+        if ($role != 'ROLE_ADMIN')
+        {
             return $this->redirectToRoute('login');
         }
 
@@ -60,11 +66,12 @@ class SectorController extends AbstractController
         $form->handleRequest($request);
 
         // Check form submission
-        if ($form->isSubmitted() && $form->isValid()){
-
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $name = $form->get('name')->getData();
 
-            if ($sector_repo->findOneByName($name)) {
+            if ($sector_repo->findOneByName($name))
+            {
                 return $this->render('crud/sector/add-sector.html.twig', [
                     'form' => $form->createView(),
                     'error' => 'That sector name already exists.'
@@ -79,7 +86,9 @@ class SectorController extends AbstractController
             $entityManager->flush();
 
             return $this->RedirectToRoute('sectors', ['success' => "The sector '".$form->get('name')->getData()."' has been created."]);
-        } else {
+        }
+        else
+        {
             return $this->render('crud/sector/add-sector.html.twig', [
                 'form' => $form->createView(),
             ]);
@@ -87,7 +96,7 @@ class SectorController extends AbstractController
     }
 
     /**
-     * @Route("/crud/sectors/edit/{id}", name="edit-sector")
+     * @Route("/crud/sector/edit/{id}", name="edit-sector")
      */
     public function editSector(Security $security, Request $request, $id): Response
     {
@@ -95,19 +104,32 @@ class SectorController extends AbstractController
         $user = $security->getUser();
 
         //check for user and get his role, redirect if no user is logged
-        if ($user) {
+        if ($user)
+        {
             $role = $user->getIdRole()->getCodename();
-        } else {
+        }
+        else
+        {
             return $this->redirectToRoute('login');
         }
 
         //stops the method if it's not admin
-        if ($role != 'ROLE_ADMIN') {
+        if ($role != 'ROLE_ADMIN')
+        {
             return $this->redirectToRoute('login');
         }
 
         $sector_repo = $this->getDoctrine()->getRepository(Sector::class);
         $sector = $sector_repo->findOneById($id);
+
+        if (!$sector)
+        {
+            return $this->RedirectToRoute('sectors', [
+                'modal' => "Not found",
+                'message' => "That sector doesn't exists",
+                'button' => "ok",
+            ]);
+        }
 
         // Create the form
         $form = $this->createFormBuilder()
@@ -121,11 +143,12 @@ class SectorController extends AbstractController
         $form->handleRequest($request);
 
         // Check form submission
-        if ($form->isSubmitted() && $form->isValid()){
-
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $name = $form->get('name')->getData();
 
-            if ($sector->getName() == $name) {
+            if ($sector->getName() == $name)
+            {
                 return $this->RedirectToRoute('sectors', [
                     'modal' => "Nothing changed",
                     'message' => "The sector '".$form->get('name')->getData()."' has the same name.",
@@ -133,10 +156,12 @@ class SectorController extends AbstractController
                 ]);
             }
 
-            if ($sector_repo->findOneByName($name)) {
+            if ($sector_repo->findOneByName($name))
+            {
                 return $this->render('crud/sector/edit-sector.html.twig', [
                     'form' => $form->createView(),
-                    'error' => 'That sector name already exists.'
+                    'error' => 'That sector name already exists.',
+                    'sector' => $sector
                 ]);
             }
             $sector->setName($name);
@@ -150,7 +175,9 @@ class SectorController extends AbstractController
                 'message' => "The sector has been edited successfully.",
                 'button' => "ok",
             ]);
-        } else {
+        }
+        else
+        {
             return $this->render('crud/sector/edit-sector.html.twig', [
                 'form' => $form->createView(),
                 'sector' => $sector
@@ -159,7 +186,7 @@ class SectorController extends AbstractController
     }
 
     /**
-     * @Route("/crud/sectors/delete/{id}", name="delete-sector")
+     * @Route("/crud/sector/delete/{id}", name="delete-sector")
      */
     public function deleteSector(Security $security, Request $request, $id): Response
     {
@@ -167,14 +194,18 @@ class SectorController extends AbstractController
         $user = $security->getUser();
 
         //check for user and get his role, redirect if no user is logged
-        if ($user) {
+        if ($user)
+        {
             $role = $user->getIdRole()->getCodename();
-        } else {
+        }
+        else
+        {
             return $this->redirectToRoute('login');
         }
 
         //stops the method if it's not admin
-        if ($role != 'ROLE_ADMIN') {
+        if ($role != 'ROLE_ADMIN')
+        {
             return $this->redirectToRoute('login');
         }
 
@@ -183,13 +214,33 @@ class SectorController extends AbstractController
                         ->getForm();
 
         $sector_repo = $this->getDoctrine()->getRepository(Sector::class);
+        $company_repo = $this->getDoctrine()->getRepository(Company::class);
         $sector = $sector_repo->findOneById($id);
+
+        if (!$sector)
+        {
+            return $this->RedirectToRoute('sectors', [
+                'modal' => "Not found",
+                'message' => "That sector doesn't exists",
+                'button' => "ok",
+            ]);
+        }
 
         // Check form request
         $form->handleRequest($request);
 
         // Check form submission
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $sectorName = $sector->getName();
+
+            if ($company_repo->findByIdSector($sector)) {
+                return $this->RedirectToRoute('sectors', [
+                    'modal' => "Can't delete sector",
+                    'message' => "The sector '$sectorName' has companies attached to it.",
+                    'button' => "ok",
+                ]);
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($sector);
@@ -197,10 +248,12 @@ class SectorController extends AbstractController
 
             return $this->RedirectToRoute('sectors', [
                 'modal' => "Sector deleted",
-                'message' => "The sector has been deleted successfully.",
+                'message' => "The sector '$sectorName' has been deleted successfully.",
                 'button' => "ok",
             ]);
-        } else {
+        }
+        else
+        {
             return $this->render('crud/sector/delete-sector.html.twig', [
                 'form' => $form->createView(),
                 'sector' => $sector
@@ -214,7 +267,8 @@ class SectorController extends AbstractController
     public function sectorsIndex(Security $security, $page): Response
     {
         //checks if the page is a real number and converts
-        if (!is_numeric($page)) {
+        if (!is_numeric($page))
+        {
             $page = 1;
         }
         $page = intval($page);
@@ -227,17 +281,23 @@ class SectorController extends AbstractController
         $user = $security->getUser();
 
         //check for user and get his role, redirect if no user is logged
-        if ($user) {
+        if ($user)
+        {
             $role = $user->getIdRole()->getCodename();
-        } else {
+        }
+        else
+        {
             return $this->redirectToRoute('login');
         }
 
         //number of records, depends on role and if user, depends on user
-        if ($role == 'ROLE_ADMIN') {
+        if ($role == 'ROLE_ADMIN')
+        {
             $adapter = new ArrayAdapter($sector_repo->findAll());
-        } else {
-            $items = $userSector_repo->findSectorsByIdUser($user);
+        }
+        else
+        {
+            $items = $userSector_repo->findByIdUser($user);
             $adapter = new ArrayAdapter($sector_repo->findAllByUserSectorIdArray($items));
         }
 
@@ -246,7 +306,8 @@ class SectorController extends AbstractController
         $pagerfanta->setMaxPerPage(10);
 
         //Limits the number of pages
-        if ($page > $pagerfanta->getNbPages()) {
+        if ($page > $pagerfanta->getNbPages())
+        {
             $page = $pagerfanta->getNbPages();
         }
         $pagerfanta->setCurrentPage($page);
@@ -254,27 +315,32 @@ class SectorController extends AbstractController
         //Here we do limit the pagination
         $minPagination = $page - 2;
         $maxPagination = $page + 2;
-        if ($minPagination < 1) {
+        if ($minPagination < 1)
+        {
             $minPagination = 1;
             $maxPagination = 5;
         }
-        if ($maxPagination > $pagerfanta->getNbPages()) {
+
+        if ($maxPagination > $pagerfanta->getNbPages())
+        {
             $maxPagination = $pagerfanta->getNbPages();
         }
+
         $useMin = false;
         $useMax = false;
-        if ($minPagination > 1) {
+
+        if ($minPagination > 1)
+        {
             $useMin = true;
         }
-        if ($maxPagination < $pagerfanta->getNbPages()) {
+
+        if ($maxPagination < $pagerfanta->getNbPages())
+        {
             $useMax = true;
         }
 
-        $sectors = $sector_repo->findAll();
-
         return $this->render('crud/sector/sectors.html.twig', [
             'controller_name' => 'SectorController',
-            'sectors' => $sectors,
             'pagerfanta' => $pagerfanta,
             'minPage' => $minPagination,
             'maxPage' => $maxPagination,

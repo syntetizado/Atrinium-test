@@ -1,11 +1,11 @@
-# Atrinium-test
+# Atrinium-test v2
 
 notes:
-- User role can be changed clicking on role (test purpose, dont mind as security issue)
-- This project was made in 3 days
 - I used CLI server for this build
+- The database has changed, please import this new one
 
 Steps to install app:
+
 	- Install Symfony:
 		$ composer create-project symfony/website-skeleton atrinium
 
@@ -14,12 +14,14 @@ Steps to install app:
 		#Create 'testuser' on phpMyAdmin if don't exist (no password)
 		#Please, check if server version is ok
 
+	- Import database on a MySQL server
+
 	- move console symbol to project root
 
 	- Just in case, lets ask for pagerfanta-bundle:
-		$ composer require white-october/pagerfanta-bundle
+		$ composer require pagerfanta/pagerfanta
 
-	- Now, copy all files on root (/src /config /templates)
+	- Now, copy all files on root (/src /config /templates /public) 
 
 	- use Symfony CLI (on root):
 		$ symfony server:start

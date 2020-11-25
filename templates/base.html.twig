@@ -34,7 +34,7 @@
             {% if currentRoute != "/" %}
         <p class="ml-5 mt-5">
             <a href="{{path('go-back',{'currentRoute' : currentRoute})}}">
-                <button class="btn btn-secondary btn-lg">Go back <i class="fas fa-undo"></i></button>
+                <button class="btn btn-danger btn-lg">Back <i class="fas fa-undo"></i></button>
 		    </a>
         </p>
             {% endif %}
@@ -65,5 +65,22 @@
             });
         </script>
         {% endif %}
+
+        <script type="text/javascript">
+        $( document ).ready(function() {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var c = url.searchParams.get('modal');
+            if (c != null) {
+                new_url = url_string.replace('?'+window.location.search.substr(1), "");
+                window.history.replaceState("test", "Atrinium Test", new_url );
+            }
+            /*var c2 = url.searchParams.get('nameFilter');
+            if (c2 != null) {
+                new_url = url_string.replace('?'+window.location.search.substr(1), "");
+                window.history.replaceState("test", "Atrinium Test", new_url );
+            }*/
+        });
+        </script>
     </body>
 </html>

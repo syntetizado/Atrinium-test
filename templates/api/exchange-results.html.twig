@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ApiController!{% endblock %}
+
+{% block body %}
+
+<div class="jumbotron text-center bg-success text-light">
+	<h1> Money currency conversion </h1>
+	<p>Fill the form and press <b>convert</b> to see the results</p>
+</div>
+
+<div class="content">
+    <div class="row">
+        <div class="col-xl-4 col-md-3 col-sm-2"></div>
+        <div class="col-xl-4 col-md-6 col-sm-8 px-4 shadow p-3 m-5 bg-white rounded">
+			<div class="row">
+				<div class="col-12">
+					Conversion <span class="font-weight-bold">{{conversionData.coin1}} <i class="fas fa-arrow-right"></i> {{conversionData.coin2}}</span>
+				</div>
+				<div class="col-12">
+					<p class="border-top">Rate at <span class="font-weight-bold"> {{data.date}} </span> - <span class="font-weight-bold">{{conversionData.conversionRatio}}</span> </p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<span class="font-weight-bold">Input: </span>{{conversionData.input}}
+				</div>
+				<div class="col-12">
+					<span class="font-weight-bold">Conversion: </span>{{conversionData.conversion}}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 text-muted">
+					Exchange data took from {{data.from}}.
+				</div>
+				<div class="col-12 text-muted">
+					Coin names took from {{conversionData.from}}.
+				</div>
+			</div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block goback %}
+	<div class="row mx-3">
+		<div class="col-6">
+			<a href="{{path('index')}}">
+				<button class="btn btn-danger btn-lg">Back <i class="fas fa-undo"></i></button>
+			</a>
+		</div>
+
+		<div class="col-6 text-right">
+			<a href="{{path('api')}}">
+				<button class="btn btn-primary btn-lg">Again <i class="fas fa-arrow-right"></i></button>
+			</a>
+		</div>
+	</div>
+{% endblock %}

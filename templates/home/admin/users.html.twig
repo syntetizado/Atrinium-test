@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Users {% endblock %}
+
+{% block header %}
+	{% include '_includes/header.html.twig' with {
+		'levels': {
+			1 : {
+				'name' : 'My profile',
+				'route' : 'profile',
+				},
+			2 : {
+				'name' : 'Administrate users',
+				'route' : 'admin-users',
+				}
+		}} %}
+{% endblock %}
+
+{% block body %}
+<div class="jumbotron text-center bg-dark text-light">
+	<h1> Users </h1>
+</div>
+
+<div class="content">
+    <div class="row">
+        <div class="col-auto">
+            <h2>Users</h2>
+        </div>
+        <div class="col-auto">
+            <a href="{{path('admin-create-user')}}">
+                <button class="btn btn-primary">
+                    Create <i class="fas fa-plus ml-2"></i>
+                </button>
+            </a>
+        </div>
+    </div>
+
+<div class="m-5">
+	{% if pagerfanta.haveToPaginate %}
+	<nav aria-label="Page navigation example">
+		<ul class="pagination pg-blue">
+			{% if pagerfanta.hasPreviousPage %}
+			<li class="page-item">
+				<a class="page-link" tabindex="-1" href="{{path('admin-users',{'page' : pagerfanta.getPreviousPage })}}">Previous</a>
+			{% else %}
+			<li class="page-item disabled">
+				<a class="page-link" tabindex="-1">Previous</a>
+			{% endif %}
+			</li>
+
+			{% if useMin == true %}
+			<li class="page-item">
+				<a class="page-link" href="{{path('admin-users',{'page' : 1 })}}">1</a>
+			</li>
+				{% if pagerfanta.getCurrentPage != 4 %}
+			<li class="page-item disabled">
+				<a class="page-link">...</a>
+			</li>
+				{% endif %}
+			{% endif %}
+
+			{% for page in minPage .. maxPage %}
+			{% if page == pagerfanta.getCurrentPage %}
+			<li class="page-item active">
+			{% else %}
+			<li class="page-item">
+			{% endif %}
+				<a class="page-link" href="{{path('admin-users',{'page' : page })}}">{{page}}</a>
+			</li>
+			{% endfor %}
+
+			{% if useMax == true %}
+				{% if pagerfanta.getCurrentPage != pagerfanta.getNbPages - 3 %}
+			<li class="page-item disabled">
+				<a class="page-link">...</a>
+			</li>
+				{% endif %}
+			<li class="page-item">
+				<a class="page-link" href="{{path('admin-users',{'page' : pagerfanta.getNbPages })}}">{{pagerfanta.getNbPages}}</a>
+			</li>
+			{% endif %}
+
+			{% if pagerfanta.hasNextPage %}
+			<li class="page-item">
+				<a class="page-link" href="{{path('admin-users',{'page' : pagerfanta.getNextPage })}}">Next</a>
+			{% else %}
+			<li class="page-item disabled">
+				<a class="page-link">Next</a>
+			{% endif %}
+			</li>
+		</ul>
+	</nav>
+	{% endif %}
+
+	<table class="table col-12 table-hover table-responsive-sm">
+	    <thead>
+	        <tr>
+	            <th scope="col">#</th>
+	            <th scope="col">Name</th>
+				<th scope="col">Email</th>
+				<th scope="col">Active</th>
+				<th scope="col">Edit</th>
+				<th scope="col">Delete</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	    {% for user in pagerfanta.getCurrentPageResults %}
+			{% if user.id == app.user.id %}
+			<tr class="text-white bg-danger">
+			{% else %}
+			<tr>
+			{% endif %}
+	            <th scope="col">{{user.id}}</th>
+	            <th scope="col">{{user.username}}</th>
+				<th scope="col">{{user.email}}</th>
+				<th scope="col">{{user.isActive}}</th>
+				<th scope="col">
+					{% if user.id == app.user.id %}
+						<button class="btn" style="background-color: #fff !important; opacity: 1 !important;" disabled>
+							<i class="fas fa-lock"></i>
+						</button>
+					{% else %}
+					<a href="{{path('admin-edit-user',{'id':user.id})}}">
+						<button class="btn btn-primary">
+							<i class="fas fa-edit"></i>
+						</button>
+					</a>
+					{% endif %}
+
+				</th>
+				<th scope="col">
+					{% if user.id == app.user.id %}
+						<button class="btn" style="background-color: #fff !important; opacity: 1 !important;" disabled>
+							<i class="fas fa-lock"></i>
+						</button>
+					{% else %}
+					<a href="{{path('admin-delete-user',{'id':user.id})}}">
+						<button class="btn btn-danger">
+							<i class="fas fa-trash"></i>
+						</button>
+					</a>
+					{% endif %}
+				</th>
+	        </tr>
+	    {% endfor %}
+	    </tbody>
+	</table>
+</div>
+
+</div>
+{% endblock %}
+
+{% block goback %}
+
+<p class="ml-5 mt-5">
+	<a href="{{path('profile')}}">
+		<button class="btn btn-danger btn-lg">Back <i class="fas fa-undo"></i></button>
+	</a>
+</p>
+
+{% endblock %}

@@ -3,9 +3,13 @@
 {% block title %}Register{% endblock %}
 
 {% block formheader %}
-    {% include '_includes/header.html.twig' with {
-        'levels': ['Register']
-    } %}
+{% include '_includes/header.html.twig' with {
+    'levels': {
+        1 : {
+            'name' : 'Register',
+            'route' : 'register',
+            }
+    }} %}
 {% endblock %}
 
 {% block formcontent %}

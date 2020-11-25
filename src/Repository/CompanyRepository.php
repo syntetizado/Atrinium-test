@@ -19,12 +19,6 @@ class CompanyRepository extends ServiceEntityRepository
         parent::__construct($registry, Company::class);
     }
 
-    public function findByIdSectorFk($sectors)
-    {
-        $items_array = [];
-
-    }
-
     // /**
     //  * @return Company[] Returns an array of Company objects
     //  */

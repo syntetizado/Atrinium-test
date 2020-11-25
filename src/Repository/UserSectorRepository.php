@@ -32,17 +32,31 @@ class UserSectorRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findSectorsByIdUser($value)
+    public function findByUserAndSector($user, $sector)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.idUser = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->findBy([
+            'idUser' => $user->getId(),
+            'idSector' => $sector->getId()
+        ]);
     }
+
+    public function findOneByUserAndSector($user, $sector)
+    {
+        return $this->findOneBy([
+            'idUser' => $user->getId(),
+            'idSector' => $sector->getId()
+        ]);
+    }
+
+    public function findByIdUserLimitByInt($user, $int)
+    {
+        return $this->findBy(
+            ['idUser' => $user->getId()],
+            [],
+            $int
+        );
+    }
+
 
     // /**
     //  * @return UserSector[] Returns an array of UserSector objects

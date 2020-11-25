@@ -4,8 +4,12 @@
 
 {% block formheader %}
     {% include '_includes/header.html.twig' with {
-        'levels': ['Login']
-    } %}
+        'levels': {
+            1 : {
+                'name' : 'Login',
+                'route' : 'login',
+                }
+        }} %}
 {% endblock %}
 
 {% block formcontent %}

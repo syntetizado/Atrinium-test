@@ -1,0 +1,7 @@
+{% set currentRoute = path(app.request.attributes.get('_route')) %}
+
+<div class="">
+	<a href="{{path('go-back',{'currentRoute' : currentRoute})}}">
+		<button class="btn btn-secondary btn-lg">Go back <i class="fas fa-undo"></i></button>
+	</a>
+</div>

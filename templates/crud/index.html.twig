@@ -4,8 +4,12 @@
 
 {% block header %}
 	{% include '_includes/header.html.twig' with {
-		'levels': ['Crud']
-	} %}
+		'levels': {
+			1 : {
+				'name' : 'Crud',
+				'route' : 'crud',
+				}
+		}} %}
 {% endblock %}
 
 {% block body %}
